@@ -1,0 +1,28 @@
+name: Schedule Project Upload
+
+on:
+  schedule:
+    # UTC timezone ke hisaab se schedule karen
+    - cron: "0 10 * * *" # Har din subah 10 baje (UTC)
+
+jobs:
+  upload-files:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Add Files to Repository
+      run: |
+        echo "Creating new files..."
+        mkdir scheduled_files
+        echo "This is a scheduled file created on $(date)" > scheduled_files/scheduled_file.txt
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name "Your GitHub Username"
+        git config --global user.email "YourEmail@example.com"
+        git add .
+        git commit -m "Scheduled upload: $(date)"
+        git push
